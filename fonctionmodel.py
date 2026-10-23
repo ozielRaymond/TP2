@@ -7,7 +7,7 @@ class FonctionModel:
     __minimum: float
     __maximum: float
     __x: Expr
-    __fonction: Expr
+    __fonction: str
     __tangente: float
 
     def __init__(self, fonction, minimum, maximum, tangente):
