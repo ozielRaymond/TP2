@@ -49,8 +49,13 @@ class FonctionModel:
     @property
     def differentie(self):
         expr = sp.sympify(self.__fonction)
-        derivee = sp.diff(expr, self.__x) + 0 * self.__x
+        derivee = sp.diff(expr, self.__x)
         return sp.lambdify(self.__x, derivee, modules="numpy")
+
+    def derivee_text(self):
+        expr = sp.sympify(self.__fonction)
+        derivee = sp.diff(expr, self.__x)
+        return str(derivee)
 
     @property
     def fonction(self):

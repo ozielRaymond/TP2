@@ -31,12 +31,12 @@
       <rect>
        <x>480</x>
        <y>70</y>
-       <width>81</width>
+       <width>231</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Taux variation</string>
+      <string>Taux de variation : </string>
      </property>
     </widget>
     <widget class="QWidget" name="MPLWidget">
@@ -52,14 +52,14 @@
       <item>
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Fonction Dérivéee</string>
+         <string>Fonction Dérivée</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Point tengeance</string>
+         <string>Point de tangence : 0</string>
         </property>
        </widget>
       </item>
