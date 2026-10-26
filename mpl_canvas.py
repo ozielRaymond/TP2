@@ -14,12 +14,10 @@ class MPLCanvas(FigureCanvasQTAgg):
 
     def dessiner(self, model : FonctionModel):
 
-        x = np.linspace(0, 10, 500)
+        x = np.linspace(model.minimum, model.maximum, 500)
 
         y1 = model.fonction(x)
-
-        #TODO Modifier y2 pour avoir la derivée
-        y2 = model.fonction(x)
+        y2 = model.differentie(x)
 
         self.__ax[0].plot(x, y1)
         self.__ax[0].set_title("Graphe de f")

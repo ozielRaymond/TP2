@@ -18,11 +18,6 @@ class FonctionModel:
         self.__maximum = maximum
         self.__tangente = tangente
 
-    def differentie(self):
-        expr = sp.sympify(self.__fonction)
-        derivee = sp.diff(expr, self.__x)
-        return sp.lambdify(self.__x, derivee, modules="numpy")
-
     @property
     def tangente(self):
         return self.__tangente
@@ -50,6 +45,12 @@ class FonctionModel:
     @property
     def variable(self):
         return self.__x
+
+    @property
+    def differentie(self):
+        expr = sp.sympify(self.__fonction)
+        derivee = sp.diff(expr, self.__x) + 0 * self.__x
+        return sp.lambdify(self.__x, derivee, modules="numpy")
 
     @property
     def fonction(self):
