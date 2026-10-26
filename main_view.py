@@ -14,10 +14,9 @@ class MainView(QMainWindow):
 
         loadUi("mainWindow.ui", self)
 
-        #Test rapide de FonctionModel
+        #Test rapid de FonctionModel
         self.__model = FonctionModel("10*x", 0, 10, 2)
-        self.canvas = MPLCanvas(self.__model, False)
-
+        self.canvas = MPLCanvas(self.__model)
 
         layout_f = QVBoxLayout(self.widget)
         layout_f.addWidget(self.canvas)

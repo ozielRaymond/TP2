@@ -21,7 +21,6 @@ class FonctionModel:
     def differentie(self):
         expr = sp.sympify(self.__fonction)
         derivee = sp.diff(expr, self.__x)
-
         return sp.lambdify(self.__x, derivee, modules="numpy")
 
     @property
