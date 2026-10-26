@@ -12,14 +12,17 @@ class FonctionModel:
 
     def __init__(self, fonction, minimum, maximum, tangente):
         super().__init__()
-        self.__x = sp.symbols("x")
+        self.__x = sp.symbols('x')
         self.__fonction = fonction
         self.__minimum = minimum
         self.__maximum = maximum
         self.__tangente = tangente
 
     def differentie(self):
-        return sp.diff(self.fonction, self.variable)
+        expr = sp.sympify(self.__fonction)
+        derivee = sp.diff(expr, self.__x)
+
+        return sp.lambdify(self.__x, derivee, modules="numpy")
 
     @property
     def tangente(self):
@@ -52,7 +55,7 @@ class FonctionModel:
     @property
     def fonction(self):
         expr = sp.sympify(self.__fonction)
-        return sp.lambdify(self.variable, expr, modules="numpy")
+        return sp.lambdify(self.__x, expr, modules="numpy")
 
     @fonction.setter
     def fonction(self, value):
