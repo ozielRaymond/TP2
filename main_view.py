@@ -5,19 +5,19 @@ from fonctionmodel import FonctionModel
 
 class MainView(QMainWindow):
     __model : FonctionModel
+    widget : QWidget
 
     def __init__(self):
         super().__init__()
 
-        #Test rapide de FonctionModel
-        model = FonctionModel("3", 0, 10, 2)
-
-        central = QWidget()
-        self.setCentralWidget(central)
-        layout = QVBoxLayout()
-        central.setLayout(layout)
-
-        canvas = MPLCanvas(model)
-        layout.addWidget(canvas)
-
         loadUi("mainWindow.ui", self)
+
+        #Test rapide de FonctionModel
+        self.__model = FonctionModel("3*x+1", 0, 10, 2)
+
+        self.canvas = MPLCanvas(self.__model)
+
+        layout = QVBoxLayout(self.widget)
+        layout.addWidget(self.canvas)
+
+

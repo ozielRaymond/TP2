@@ -13,9 +13,11 @@ class MPLCanvas(FigureCanvasQTAgg):
         self.dessiner(model)
 
     def dessiner(self, model):
-        #TODO Faire en sorte que la grandeur de y est 500 aussi
+
         x = np.linspace(model.minimum, model.maximum, 500)
         y1 = model.fonction(x)
+
+        y1 = y1 * np.ones(len(x))
         #y2 = model.differentie()
 
         self.__ax.plot(x, y1)
