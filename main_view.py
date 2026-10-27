@@ -35,13 +35,3 @@ class MainView(QMainWindow):
     def update_valeurs_slide(self, value):
         self.label_5.setText("Point de tangence : " + str(value))
         self.label_6.setText("Taux de variation : " + str(self.__model.differentie(value)))
-
-
-
-
-
-
-
-
-
-
