@@ -5,14 +5,15 @@ from fonctionmodel import FonctionModel
 
 class MainView(QMainWindow):
     __model : FonctionModel
+
+    fonctionLineEdit: QLineEdit
+
     widget : QWidget
-    label_4 : QLabel
+
     horizontalSlider : QSlider
-
-    label_5 : QLabel
-    label_6 : QLabel
-
-    lineEdit : QLineEdit
+    deriveeLabel : QLabel
+    tangenceLabel : QLabel
+    TVLabel : QLabel
 
     def __init__(self):
         super().__init__()
@@ -29,9 +30,9 @@ class MainView(QMainWindow):
         self.horizontalSlider.setMinimum(self.__model.minimum)
         self.horizontalSlider.setMaximum(self.__model.maximum)
 
-        self.label_4.setText("Fonction Dérivée : " + self.__model.derivee_text())
+        self.deriveeLabel.setText("Fonction Dérivée : " + self.__model.derivee_text())
         self.horizontalSlider.valueChanged.connect(self.update_valeurs_slide)
 
     def update_valeurs_slide(self, value):
-        self.label_5.setText("Point de tangence : " + str(value))
-        self.label_6.setText("Taux de variation : " + str(self.__model.differentie(value)))
+        self.tangenceLabel.setText("Point de tangence : " + str(value))
+        self.TVLabel.setText("Taux de variation : " + str(self.__model.differentie(value)))
