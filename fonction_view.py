@@ -5,25 +5,28 @@ from sympy import SympifyError
 from liste_fonctions_model import ListeFonctionsModel
 import sympy as sp
 
+
 class FonctionView(QDockWidget):
-    saveButton : QPushButton
-    addButton : QPushButton
-    deleteButton : QPushButton
+    saveButton: QPushButton
+    addButton: QPushButton
+    deleteButton: QPushButton
 
-    listWidget : QListWidget
+    listWidget: QListWidget
 
-    lineEdit : QLineEdit
+    lineEdit: QLineEdit
 
     def __init__(self, parent=None):
-        super().__init__("Éditeur de fonctions", parent)
+        super().__init__(parent)
         loadUi('fonction_view.ui', self)
 
         self.liste_fonctions = ListeFonctionsModel("fonctions.json")
         self.display_fonctions()
 
-        self.deleteButton.clicked.connect(lambda : self.remove_fonction())
-        self.addButton.clicked.connect(lambda : self.add_fonction())
-        self.saveButton.clicked.connect(lambda : self.save())
+        self.deleteButton.clicked.connect(lambda: self.remove_fonction())
+        self.addButton.clicked.connect(lambda: self.add_fonction())
+        self.saveButton.clicked.connect(lambda: self.save())
+
+        self.lineEdit.textChanged.connect(lambda: self.lineEdit.setStyleSheet(""))
 
     def display_fonctions(self):
         self.listWidget.clear()
@@ -34,30 +37,39 @@ class FonctionView(QDockWidget):
         element_a_ajouter = self.lineEdit.text().strip()
 
         if not element_a_ajouter:
+            self.lineEdit.setStyleSheet("""
+                QLineEdit {
+                background-color : #D9544D; 
+                }
+            """)
             return
 
         try:
             expr = sp.sympify(element_a_ajouter)
-
             x = sp.symbols('x')
 
             # Suggestion de l'IA : utiliser free_symbols.issubset({x}) pour attraper les variables qui ne sont pas x
             if not expr.free_symbols.issubset({x}):
                 raise ValueError("La fonction doit contenir seulement la variable 'x'.")
 
+            self.lineEdit.setStyleSheet("")
             self.liste_fonctions.add_fonction(element_a_ajouter)
             self.display_fonctions()
             self.lineEdit.clear()
 
         # Suggestion de l'IA : utiliser un QMessageBox pour prévenir l'utilisateur
         except (SympifyError, ValueError):
+            self.lineEdit.setStyleSheet("""
+                            QLineEdit {
+                            background-color : #D9544D; 
+                            }
+                        """)
             QMessageBox.warning(
                 self,
                 "Fonction invalide",
                 "La fonction que vous tentez d'ajouter est invalide"
                 "\nVérifiez la syntaxe"
             )
-
 
     def remove_fonction(self):
         element_selectionne = self.listWidget.currentItem().text()
@@ -67,5 +79,3 @@ class FonctionView(QDockWidget):
 
     def save(self):
         self.liste_fonctions.save_fonctions("fonctions.json")
-
-
