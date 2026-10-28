@@ -51,11 +51,9 @@ class FonctionModel:
         expr = sp.sympify(self.__fonction)
         derivee = sp.diff(expr, self.__x)
 
-        # Bloc proposé par l'IA
-        # Évite les erreurs quand la dérivée est une constante
         if derivee.is_number:
             constante = float(derivee)
-            return lambda x : np.full_like(x, constante)
+            return lambda x : np.broadcast_to(constante, np.shape(x))
 
         return sp.lambdify(self.__x, derivee, modules="numpy")
 
@@ -68,12 +66,9 @@ class FonctionModel:
     def fonction(self):
         expr = sp.sympify(self.__fonction)
 
-        # Bloc proposé par l'IA
-        # Évite les erreurs quand la fonction est une constante
         if expr.is_number:
-            # noinspection PyTypeChecker
             constante = float(expr)
-            return lambda x: np.full_like(x, constante)
+            return lambda x : np.broadcast_to(constante, np.shape(x))
 
         return sp.lambdify(self.__x, expr, modules="numpy")
 

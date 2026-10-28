@@ -192,7 +192,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <action name="modifierFonctions">
    <property name="text">
-    <string>Fonctions</string>
+    <string>Masquer la liste des fonctions</string>
    </property>
   </action>
  </widget>

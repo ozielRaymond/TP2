@@ -4,6 +4,7 @@ from mpl_canvas import MPLCanvas
 from fonctionmodel import FonctionModel
 from fonction_view import FonctionView
 from PyQt6.QtGui import QAction
+from PyQt6.QtCore import Qt
 from liste_fonctions_model import ListeFonctionsModel
 
 
@@ -28,8 +29,6 @@ class MainView(QMainWindow):
         super().__init__()
 
         loadUi("mainWindow.ui", self)
-
-        self.modifierFonctions.triggered.connect(self.ouvrir_q_dialog)
 
         self.liste_fonctions = ListeFonctionsModel("fonctions.json")
         self.comboBox.addItems(self.liste_fonctions.liste_fonctions)
@@ -56,9 +55,19 @@ class MainView(QMainWindow):
 
         self.horizontalSlider.valueChanged.connect(self.update_valeurs_slide)
         self.comboBox.currentTextChanged.connect(self.charger_fonction)
-
         self.doubleSpinBox.valueChanged.connect(self.update_bounds)
         self.doubleSpinBox_2.valueChanged.connect(self.update_bounds)
+
+        self.dock_widget = FonctionView(self)
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_widget)
+        self.modifierFonctions.triggered.connect(self.toggle_dock)
+
+    def toggle_dock(self):
+        if self.dock_widget.isVisible():
+            self.dock_widget.setVisible(False)
+        else:
+            self.dock_widget.setVisible(True)
+
 
     def update_valeurs_slide(self, value):
         self.model.tangente = value
@@ -78,11 +87,6 @@ class MainView(QMainWindow):
 
             self.update_canvas()
 
-    def ouvrir_q_dialog(self):
-        dialog = FonctionView(self)
-        dialog.exec()
-        self.update_window()
-
     def update_canvas(self):
         if self.canvas:
             self.widget.layout().removeWidget(self.canvas)
@@ -99,7 +103,6 @@ class MainView(QMainWindow):
         self.comboBox.clear()
         self.liste_fonctions = ListeFonctionsModel("fonctions.json")
         self.comboBox.addItems(self.liste_fonctions.liste_fonctions)
-
         self.model.fonction = self.comboBox.currentText()
         self.update_canvas()
 

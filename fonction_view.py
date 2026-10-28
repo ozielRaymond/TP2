@@ -1,11 +1,11 @@
-from PyQt6.QtWidgets import QDialog, QPushButton, QListWidget, QLineEdit, QMessageBox
+from PyQt6.QtWidgets import QPushButton, QListWidget, QLineEdit, QMessageBox, QDockWidget
 from PyQt6.uic import loadUi
 from sympy import SympifyError
 
 from liste_fonctions_model import ListeFonctionsModel
 import sympy as sp
 
-class FonctionView(QDialog):
+class FonctionView(QDockWidget):
     saveButton : QPushButton
     addButton : QPushButton
     deleteButton : QPushButton
@@ -15,7 +15,7 @@ class FonctionView(QDialog):
     lineEdit : QLineEdit
 
     def __init__(self, parent=None):
-        super().__init__(parent)
+        super().__init__("Éditeur de fonctions", parent)
         loadUi('fonction_view.ui', self)
 
         self.liste_fonctions = ListeFonctionsModel("fonctions.json")
@@ -50,7 +50,7 @@ class FonctionView(QDialog):
             self.lineEdit.clear()
 
         # Suggestion de l'IA : utiliser un QMessageBox pour prévenir l'utilisateur
-        except SympifyError, ValueError:
+        except (SympifyError, ValueError):
             QMessageBox.warning(
                 self,
                 "Fonction invalide",
@@ -67,6 +67,5 @@ class FonctionView(QDialog):
 
     def save(self):
         self.liste_fonctions.save_fonctions("fonctions.json")
-        self.accept()
 
 
