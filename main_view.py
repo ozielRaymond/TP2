@@ -2,6 +2,8 @@ from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLineEdit, QLabel
 from PyQt6.uic import loadUi
 from mpl_canvas import MPLCanvas
 from fonctionmodel import FonctionModel
+from fonction_view import FonctionView
+from PyQt6.QtGui import QAction
 
 class MainView(QMainWindow):
     __model : FonctionModel
@@ -15,10 +17,14 @@ class MainView(QMainWindow):
     tangenceLabel : QLabel
     TVLabel : QLabel
 
+    modifierFonctions : QAction
+
     def __init__(self):
         super().__init__()
 
         loadUi("mainWindow.ui", self)
+
+        self.modifierFonctions.triggered.connect(self.ouvrir_q_dialog)
 
         #Test rapide de FonctionModel
         self.__model = FonctionModel("10*x^2", 0, 10, 2)
@@ -36,3 +42,7 @@ class MainView(QMainWindow):
     def update_valeurs_slide(self, value):
         self.tangenceLabel.setText("Point de tangence : " + str(value))
         self.TVLabel.setText("Taux de variation : " + str(self.__model.differentie(value)))
+
+    def ouvrir_q_dialog(self):
+        dialog = FonctionView(self)
+        dialog.exec()
