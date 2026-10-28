@@ -1,7 +1,7 @@
 import sympy as sp
+import numpy as np
 
 from sympy import Expr
-
 
 class FonctionModel:
     __minimum: float
@@ -50,6 +50,13 @@ class FonctionModel:
     def differentie(self):
         expr = sp.sympify(self.__fonction)
         derivee = sp.diff(expr, self.__x)
+
+        # Bloc proposé par l'IA
+        # Évite les erreurs quand la dérivée est une constante
+        if derivee.is_number:
+            constante = float(derivee)
+            return lambda x : np.full_like(x, constante)
+
         return sp.lambdify(self.__x, derivee, modules="numpy")
 
     def derivee_text(self):
@@ -60,6 +67,14 @@ class FonctionModel:
     @property
     def fonction(self):
         expr = sp.sympify(self.__fonction)
+
+        # Bloc proposé par l'IA
+        # Évite les erreurs quand la fonction est une constante
+        if expr.is_number:
+            # noinspection PyTypeChecker
+            constante = float(expr)
+            return lambda x: np.full_like(x, constante)
+
         return sp.lambdify(self.__x, expr, modules="numpy")
 
     @fonction.setter
