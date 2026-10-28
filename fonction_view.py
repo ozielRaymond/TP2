@@ -1,6 +1,9 @@
-from PyQt6.QtWidgets import QDialog, QPushButton, QListWidget, QLineEdit
+from PyQt6.QtWidgets import QDialog, QPushButton, QListWidget, QLineEdit, QMessageBox
 from PyQt6.uic import loadUi
+from sympy import SympifyError
+
 from liste_fonctions_model import ListeFonctionsModel
+import sympy as sp
 
 class FonctionView(QDialog):
     saveButton : QPushButton
@@ -28,11 +31,33 @@ class FonctionView(QDialog):
             self.listWidget.addItem(fonction)
 
     def add_fonction(self):
-        element_a_ajouter = self.lineEdit.text()
+        element_a_ajouter = self.lineEdit.text().strip()
 
-        self.liste_fonctions.add_fonction(element_a_ajouter)
-        self.display_fonctions()
-        self.lineEdit.clear()
+        if not element_a_ajouter:
+            return
+
+        try:
+            expr = sp.sympify(element_a_ajouter)
+
+            x = sp.symbols('x')
+
+            # Suggestion de l'IA : utiliser free_symbols.issubset({x}) pour attraper les variables qui ne sont pas x
+            if not expr.free_symbols.issubset({x}):
+                raise ValueError("La fonction doit contenir seulement la variable 'x'.")
+
+            self.liste_fonctions.add_fonction(element_a_ajouter)
+            self.display_fonctions()
+            self.lineEdit.clear()
+
+        # Suggestion de l'IA : utiliser un QMessageBox pour prévenir l'utilisateur
+        except SympifyError, ValueError:
+            QMessageBox.warning(
+                self,
+                "Fonction invalide",
+                "La fonction que vous tentez d'ajouter est invalide"
+                "\nVérifiez la syntaxe"
+            )
+
 
     def remove_fonction(self):
         element_selectionne = self.listWidget.currentItem().text()
