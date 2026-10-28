@@ -1,4 +1,4 @@
-from matplotlib import pyplot as plt
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 import numpy as np
 
@@ -8,12 +8,16 @@ from fonctionmodel import FonctionModel
 class MPLCanvas(FigureCanvasQTAgg):
 
     def __init__(self, model : FonctionModel):
-        self.__fig, self.__ax = plt.subplots(1, 2)
+        # Implémentation suggérée par l'IA de self.__fig = Figure() au lieu de self.__fig, self.__ax
+        # permet de créer une figure indépendante à chaque fois au lieu d'accumuler les fonctions dans le subplot
+        self.__fig = Figure()
+        self.__ax = self.__fig.subplots(1, 2)
+
+
         super().__init__(self.__fig)
         self.dessiner(model)
 
     def dessiner(self, model : FonctionModel):
-
         x = np.linspace(model.minimum, model.maximum, 500)
 
         y1 = model.fonction(x)
