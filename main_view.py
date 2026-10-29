@@ -24,21 +24,26 @@ class MainView(QMainWindow):
     doubleSpinBox_2: QDoubleSpinBox
 
     modifierFonctions: QAction
-    exporterEnPDF : QAction
-    toggleGrid : QAction
-    couleurs : QAction
+    exporterEnPDF: QAction
+    toggleGrid: QAction
+    couleurs: QAction
 
-    bleuF : QAction
-    vertF : QAction
-    rougeF : QAction
+    bleuF: QAction
+    vertF: QAction
+    rougeF: QAction
 
-    bleuD : QAction
-    vertD : QAction
-    rougeD : QAction
+    bleuD: QAction
+    vertD: QAction
+    rougeD: QAction
 
-    bleuT : QAction
-    vertT : QAction
-    rougeT : QAction
+    bleuT: QAction
+    vertT: QAction
+    rougeT: QAction
+
+    actionOuvrir: QAction
+    actionMasquer: QAction
+    actionDocker: QAction
+    actionD_tacher: QAction
 
     def __init__(self):
         super().__init__()
@@ -78,11 +83,16 @@ class MainView(QMainWindow):
         self.dock_widget = FonctionView(self)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_widget)
 
+        self.dock_widget.setFloating(True)
+        self.was_docked = False
 
+        self.dock_widget.setVisible(False)
 
+        self.actionOuvrir.triggered.connect(self.action_ouvrir)
+        self.actionMasquer.triggered.connect(self.action_masquer)
+        self.actionDocker.triggered.connect(self.action_docker)
+        self.actionD_tacher.triggered.connect(self.action_detacher)
 
-
-        self.modifierFonctions.triggered.connect(self.toggle_dock)
         self.exporterEnPDF.triggered.connect(self.export)
         self.toggleGrid.triggered.connect(self.toggle_grid)
 
@@ -98,11 +108,26 @@ class MainView(QMainWindow):
         self.vertT.triggered.connect(lambda: self.changer_couleur("t", "green"))
         self.rougeT.triggered.connect(lambda: self.changer_couleur("t", "red"))
 
-    def toggle_dock(self):
-        if self.dock_widget.isVisible():
-            self.dock_widget.setVisible(False)
+    def action_ouvrir(self):
+        self.dock_widget.setVisible(True)
+        if self.was_docked:
+            self.dock_widget.setFloating(False)
         else:
-            self.dock_widget.setVisible(True)
+            self.dock_widget.setFloating(True)
+
+    def action_masquer(self):
+        self.was_docked = not self.dock_widget.isFloating()
+        self.dock_widget.setVisible(False)
+
+    def action_docker(self):
+        self.was_docked = True
+        self.dock_widget.setVisible(True)
+        self.dock_widget.setFloating(False)
+
+    def action_detacher(self):
+        self.was_docked = False
+        self.dock_widget.setVisible(True)
+        self.dock_widget.setFloating(True)
 
     def update_valeurs_slide(self, value):
         self.model.tangente = value
@@ -127,7 +152,6 @@ class MainView(QMainWindow):
             self.widget.layout().removeWidget(self.canvas)
             # Utilisation de l'IA pour bien comprendre la fonction deleteLater
             self.canvas.deleteLater()
-
 
         self.canvas = MPLCanvas(self.model, show_grid=self.grid_enabeled, colors=self.colors)
         self.widget.layout().addWidget(self.canvas)

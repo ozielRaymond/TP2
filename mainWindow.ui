@@ -217,19 +217,24 @@
      <addaction name="menuD_riv_e"/>
      <addaction name="menuTangente"/>
     </widget>
-    <addaction name="modifierFonctions"/>
+    <widget class="QMenu" name="menu_editeur_de_fonctions">
+     <property name="title">
+      <string>Éditeur de fonctions</string>
+     </property>
+     <addaction name="actionOuvrir"/>
+     <addaction name="actionMasquer"/>
+     <addaction name="actionDocker"/>
+     <addaction name="actionD_tacher"/>
+    </widget>
+    <addaction name="menu_editeur_de_fonctions"/>
     <addaction name="exporterEnPDF"/>
     <addaction name="toggleGrid"/>
     <addaction name="menuModifier_les_couleurs"/>
+
    </widget>
    <addaction name="menuOptions"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="modifierFonctions">
-   <property name="text">
-    <string>Éditeur de fonctions</string>
-   </property>
-  </action>
   <action name="exporterEnPDF">
    <property name="text">
     <string>Exporter en PDF</string>
@@ -288,6 +293,26 @@
   <action name="vertT">
    <property name="text">
     <string>Vert</string>
+   </property>
+  </action>
+  <action name="actionOuvrir">
+   <property name="text">
+    <string>Ouvrir</string>
+   </property>
+  </action>
+  <action name="actionMasquer">
+   <property name="text">
+    <string>Masquer</string>
+   </property>
+  </action>
+  <action name="actionDocker">
+   <property name="text">
+    <string>Docker</string>
+   </property>
+  </action>
+  <action name="actionD_tacher">
+   <property name="text">
+    <string>Détacher</string>
    </property>
   </action>
  </widget>
