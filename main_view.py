@@ -64,18 +64,20 @@ class MainView(QMainWindow):
         )
 
         self.grid_enabeled = False
-        self.colors = {"f": "blue", "f'": "blue", "t": "blue"}
+        self.colors = {"f": "blue", "f'": "blue", "t": "red"}
         self.canvas = MPLCanvas(self.model, show_grid=self.grid_enabeled, colors=self.colors)
         layout_f = QVBoxLayout(self.widget)
         layout_f.addWidget(self.canvas)
 
         self.horizontalSlider.setMinimum(int(self.model.minimum))
         self.horizontalSlider.setMaximum(int(self.model.maximum))
-        self.horizontalSlider.setValue(self.model.tangente)
+        self.horizontalSlider.setValue(int(self.model.tangente))
 
         self.deriveeLabel.setText("Fonction Dérivée : " + self.model.derivee_text())
 
         self.horizontalSlider.valueChanged.connect(self.update_valeurs_slide)
+        self.horizontalSlider.sliderReleased.connect(self.update_canvas)
+
         self.comboBox.currentTextChanged.connect(self.charger_fonction)
         self.doubleSpinBox.valueChanged.connect(self.update_bounds)
         self.doubleSpinBox_2.valueChanged.connect(self.update_bounds)

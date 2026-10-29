@@ -36,3 +36,18 @@ class MPLCanvas(FigureCanvasQTAgg):
         self.__ax[1].plot(x, y2, color=self.colors["f'"])
         self.__ax[1].set_title("Graphe de f'(x)")
         self.__ax[1].grid(self.show_grid)
+
+        #Aide de l'IA pour afficher la tangente
+        x0 = model.tangente
+        if model.minimum <= x0 <= model.maximum:
+            y0 = model.fonction(np.array([x0]))[0]
+            m0 = model.differentie(np.array([x0]))[0]
+
+            delta = (model.maximum - model.minimum) / 20
+            x_tangente = np.linspace(x0 - delta, x0 + delta, 100)
+
+            y_tangente = m0 * (x_tangente - x0) + y0
+
+            self.__ax[0].plot(x_tangente, y_tangente, color=self.colors['t'], linestyle='-', label="Tangente")
+            self.__ax[0].scatter([x0], [y0], color=self.colors['t'], s=25, zorder=5)
+            self.__ax[0].set_xlim(model.minimum, model.maximum)
