@@ -181,6 +181,6 @@ class MainView(QMainWindow):
 
     # l'IA a été consulté pour construire la fonction
     def export(self):
-        file_path = QFileDialog.getSaveFileName(self, "Exporter en PDF", "graphes.pdf", "Fichiers PDF (*.pdf)")
+        file_path, _ = QFileDialog.getSaveFileName(self, "Exporter en PDF", "graphes.pdf", "Fichiers PDF (*.pdf)")
         if file_path:
             self.canvas.figure.savefig(file_path, format='pdf', bbox_inches='tight')

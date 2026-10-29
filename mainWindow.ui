@@ -241,6 +241,9 @@
    </property>
   </action>
   <action name="toggleGrid">
+   <property name="checkable">
+       <bool>true</bool>
+   </property>
    <property name="text">
     <string>Afficher la grille</string>
    </property>
