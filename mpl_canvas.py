@@ -13,6 +13,8 @@ class MPLCanvas(FigureCanvasQTAgg):
         self.__fig = Figure()
         self.__ax = self.__fig.subplots(1, 2)
 
+        self.__fig.subplots_adjust(bottom=0.25)
+
         if colors is not None:
             self.colors = colors
         else:
@@ -24,6 +26,8 @@ class MPLCanvas(FigureCanvasQTAgg):
         self.dessiner(model)
 
     def dessiner(self, model : FonctionModel):
+        x0 = model.tangente
+
         x = np.linspace(model.minimum, model.maximum, 500)
 
         y1 = model.fonction(x)
@@ -38,16 +42,25 @@ class MPLCanvas(FigureCanvasQTAgg):
         self.__ax[1].grid(self.show_grid)
 
         #Aide de l'IA pour afficher la tangente
-        x0 = model.tangente
         if model.minimum <= x0 <= model.maximum:
             y0 = model.fonction(np.array([x0]))[0]
-            m0 = model.differentie(np.array([x0]))[0]
+            m0 = float(model.differentie(x0))
 
             delta = (model.maximum - model.minimum) / 20
             x_tangente = np.linspace(x0 - delta, x0 + delta, 100)
-
             y_tangente = m0 * (x_tangente - x0) + y0
 
-            self.__ax[0].plot(x_tangente, y_tangente, color=self.colors['t'], linestyle='-', label="Tangente")
+            b = y0 - m0 * x0
+
+            label_tangente = f"y = {m0:.2f}x {b:+.2f}"
+
+            self.__ax[0].plot(x_tangente, y_tangente, color=self.colors['t'], linestyle='-', label=label_tangente)
             self.__ax[0].scatter([x0], [y0], color=self.colors['t'], s=25, zorder=5)
             self.__ax[0].set_xlim(model.minimum, model.maximum)
+
+            self.__ax[1].vlines(x=x0, ymin=m0, ymax=m0 + 0.4, color=self.colors['t'], linestyle='-', label=f"{m0:.2f}")
+
+
+        #Aide de l'IA pour correctement agencer les légendes
+        self.__ax[0].legend(loc='lower center', bbox_to_anchor=(0.5, -0.37), framealpha=0.8, ncol=1)
+        self.__ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, -0.37), framealpha=0.8, ncol=1)
