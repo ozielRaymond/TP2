@@ -18,6 +18,11 @@ class FonctionModel:
         self.__maximum = maximum
         self.__tangente = tangente
 
+    def get_y_tangente(self, x):
+        y = self.fonction(np.array([x]))[0]
+        return float(y)
+
+
     @property
     def tangente(self):
         return self.__tangente

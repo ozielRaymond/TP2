@@ -1,7 +1,9 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QSlider, QComboBox, QDoubleSpinBox, QFileDialog
+from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QSlider, QComboBox, QDoubleSpinBox, QFileDialog, \
+    QLineEdit
 from PyQt6.uic import loadUi
+
 from fonction_view import FonctionView
 from fonctionmodel import FonctionModel
 from liste_fonctions_model import ListeFonctionsModel
@@ -19,6 +21,10 @@ class MainView(QMainWindow):
     deriveeLabel: QLabel
     tangenceLabel: QLabel
     TVLabel: QLabel
+
+    lineEditTV : QLineEdit
+    lineEditTangente : QLineEdit
+    label : QLabel
 
     doubleSpinBox: QDoubleSpinBox
     doubleSpinBox_2: QDoubleSpinBox
@@ -50,6 +56,9 @@ class MainView(QMainWindow):
 
         loadUi("mainWindow.ui", self)
 
+        self.lineEditTV.setReadOnly(True)
+        self.lineEditTangente.setReadOnly(True)
+
         self.liste_fonctions = ListeFonctionsModel("fonctions.json")
         self.comboBox.addItems(self.liste_fonctions.liste_fonctions)
 
@@ -73,7 +82,7 @@ class MainView(QMainWindow):
         self.horizontalSlider.setMaximum(int(self.model.maximum))
         self.horizontalSlider.setValue(int(self.model.tangente))
 
-        self.deriveeLabel.setText("Fonction Dérivée : " + self.model.derivee_text())
+        self.label.setText(self.model.derivee_text())
 
         self.horizontalSlider.valueChanged.connect(self.update_valeurs_slide)
         self.horizontalSlider.sliderReleased.connect(self.update_canvas)
@@ -133,8 +142,12 @@ class MainView(QMainWindow):
 
     def update_valeurs_slide(self, value):
         self.model.tangente = value
-        self.tangenceLabel.setText("Point de tangence : " + str(value))
-        self.TVLabel.setText("Taux de variation : " + str(self.model.differentie(value)))
+
+        y = self.model.get_y_tangente(value)
+        TV = float(self.model.differentie(value))
+
+        self.lineEditTangente.setText(f"({value:.2f}, {y:.2f})")
+        self.lineEditTV.setText(f"{TV:.2f}")
 
     def update_bounds(self):
         value_min = self.doubleSpinBox.value()
@@ -158,7 +171,7 @@ class MainView(QMainWindow):
         self.canvas = MPLCanvas(self.model, show_grid=self.grid_enabeled, colors=self.colors)
         self.widget.layout().addWidget(self.canvas)
 
-        self.deriveeLabel.setText("Fonction Dérivée : " + self.model.derivee_text())
+        self.label.setText(self.model.derivee_text())
         self.update_valeurs_slide(self.horizontalSlider.value())
 
     def update_window(self):
