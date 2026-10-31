@@ -59,6 +59,9 @@ class MainView(QMainWindow):
 
         loadUi("mainWindow.ui", self)
 
+        with open("style.css", "r", encoding="utf-8") as f:
+            self.setStyleSheet(f.read())
+
         self.lineEditTV.setReadOnly(True)
         self.lineEditTangente.setReadOnly(True)
 
@@ -214,7 +217,7 @@ class MainView(QMainWindow):
         fig = plt.figure(figsize=(0.01, 0.01), dpi=150)
 
         #Ajoute $ pour active le mode math de matplotlib
-        fig.text(0, 0, f"${latex_str}$", fontsize=8, color="black")
+        fig.text(0, 0, f"${latex_str}$", fontsize=8, color="white")
 
         buf = io.BytesIO()
         fig.savefig(buf, format='png', bbox_inches='tight', transparent=True, dpi=150)

@@ -141,7 +141,7 @@
       <item>
        <widget class="QGroupBox" name="groupBox">
         <property name="title">
-         <string>GroupBox</string>
+         <string>Dérivée</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="1" column="0">
