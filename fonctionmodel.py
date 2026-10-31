@@ -22,6 +22,8 @@ class FonctionModel:
         y = self.fonction(np.array([x]))[0]
         return float(y)
 
+    def get_taux_variation(self, value):
+        return float(self.differentie(value))
 
     @property
     def tangente(self):

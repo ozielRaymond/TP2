@@ -152,7 +152,7 @@ class MainView(QMainWindow):
         self.model.tangente = value
 
         y = self.model.get_y_tangente(value)
-        taux_de_variation = float(self.model.differentie(value))
+        taux_de_variation = self.model.get_taux_variation(value)
 
         self.lineEditTangente.setText(f"({value:.2f}, {y:.2f})")
         self.lineEditTV.setText(f"{taux_de_variation:.2f}")
