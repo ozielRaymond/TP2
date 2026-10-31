@@ -80,3 +80,9 @@ class FonctionModel:
     @fonction.setter
     def fonction(self, value):
         self.__fonction = value
+
+    # Fonction Utilisé pour convertir l'expression expr en latex
+    def derivee_latex(self):
+        expr = sp.sympify(self.__fonction)
+        derivee = sp.diff(expr, self.__x)
+        return sp.latex(derivee)

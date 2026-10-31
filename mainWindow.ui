@@ -164,7 +164,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="deriveeLabel">
            <property name="text">
-            <string>Fonction Dérivée </string>
+            <string>Fonction Dérivée : </string>
            </property>
           </widget>
          </item>

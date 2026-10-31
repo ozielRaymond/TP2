@@ -3,6 +3,9 @@ from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QSlider, QComboBox, QDoubleSpinBox, QFileDialog, \
     QLineEdit
 from PyQt6.uic import loadUi
+from PyQt6.QtGui import QPixmap
+import io
+import matplotlib.pyplot as plt
 
 from fonction_view import FonctionView
 from fonctionmodel import FonctionModel
@@ -82,7 +85,9 @@ class MainView(QMainWindow):
         self.horizontalSlider.setMaximum(int(self.model.maximum))
         self.horizontalSlider.setValue(int(self.model.tangente))
 
-        self.label.setText(self.model.derivee_text())
+        latex_code = self.model.derivee_latex()
+        pixmap = self.render_latex_to_pixmap(latex_code)
+        self.label.setPixmap(pixmap)
 
         self.horizontalSlider.valueChanged.connect(self.update_valeurs_slide)
         self.horizontalSlider.sliderReleased.connect(self.update_canvas)
@@ -144,10 +149,10 @@ class MainView(QMainWindow):
         self.model.tangente = value
 
         y = self.model.get_y_tangente(value)
-        TV = float(self.model.differentie(value))
+        taux_de_variation = float(self.model.differentie(value))
 
         self.lineEditTangente.setText(f"({value:.2f}, {y:.2f})")
-        self.lineEditTV.setText(f"{TV:.2f}")
+        self.lineEditTV.setText(f"{taux_de_variation:.2f}")
 
     def update_bounds(self):
         value_min = self.doubleSpinBox.value()
@@ -165,13 +170,16 @@ class MainView(QMainWindow):
     def update_canvas(self):
         if self.canvas:
             self.widget.layout().removeWidget(self.canvas)
-            # Utilisation de l'IA pour bien comprendre la fonction deleteLater
             self.canvas.deleteLater()
 
         self.canvas = MPLCanvas(self.model, show_grid=self.grid_enabeled, colors=self.colors)
         self.widget.layout().addWidget(self.canvas)
 
-        self.label.setText(self.model.derivee_text())
+        # Remplacement du texte brut par le rendu LaTeX dans le QLabel
+        latex_code = self.model.derivee_latex()
+        pixmap = self.render_latex_to_pixmap(latex_code)
+        self.label.setPixmap(pixmap)
+
         self.update_valeurs_slide(self.horizontalSlider.value())
 
     def update_window(self):
@@ -199,3 +207,20 @@ class MainView(QMainWindow):
         file_path, _ = QFileDialog.getSaveFileName(self, "Exporter en PDF", "graphes.pdf", "Fichiers PDF (*.pdf)")
         if file_path:
             self.canvas.figure.savefig(file_path, format='pdf', bbox_inches='tight')
+
+    @staticmethod
+    def render_latex_to_pixmap(latex_str):
+        """La méthode crée un pixmap (Une image de l'expression en latex avec matplotlib)."""
+        fig = plt.figure(figsize=(0.01, 0.01), dpi=150)
+
+        #Ajoute $ pour active le mode math de matplotlib
+        fig.text(0, 0, f"${latex_str}$", fontsize=8, color="black")
+
+        buf = io.BytesIO()
+        fig.savefig(buf, format='png', bbox_inches='tight', transparent=True, dpi=150)
+        plt.close(fig)
+
+        buf.seek(0)
+        pixmap = QPixmap()
+        pixmap.loadFromData(buf.read())
+        return pixmap
