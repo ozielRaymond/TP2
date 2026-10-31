@@ -7,7 +7,7 @@ from fonctionmodel import FonctionModel
 
 class MPLCanvas(FigureCanvasQTAgg):
 
-    def __init__(self, model : FonctionModel, show_grid = False, colors=None):
+    def __init__(self, model: FonctionModel, show_grid=False, colors=None):
         # Implémentation suggérée par l'IA de self.__fig = Figure() au lieu de self.__fig, self.__ax
         # permet de créer une figure indépendante à chaque fois au lieu d'accumuler les fonctions dans le subplot
         self.__fig = Figure()
@@ -18,14 +18,14 @@ class MPLCanvas(FigureCanvasQTAgg):
         if colors is not None:
             self.colors = colors
         else:
-            self.colors = {'f':"blue", "f'":"blue", "t":"blue"}
+            self.colors = {'f': "blue", "f'": "blue", "t": "blue"}
 
         self.show_grid = show_grid
 
         super().__init__(self.__fig)
         self.dessiner(model)
 
-    def dessiner(self, model : FonctionModel):
+    def dessiner(self, model: FonctionModel):
         x0 = model.tangente
 
         x = np.linspace(model.minimum, model.maximum, 500)
@@ -41,7 +41,7 @@ class MPLCanvas(FigureCanvasQTAgg):
         self.__ax[1].set_title("Graphe de f'(x)")
         self.__ax[1].grid(self.show_grid)
 
-        #Aide de l'IA pour afficher la tangente
+        # Aide de l'IA pour afficher la tangente
         if model.minimum <= x0 <= model.maximum:
             y0 = model.fonction(np.array([x0]))[0]
             m0 = float(model.differentie(x0))
@@ -60,7 +60,6 @@ class MPLCanvas(FigureCanvasQTAgg):
 
             self.__ax[1].vlines(x=x0, ymin=m0, ymax=m0 + 0.4, color=self.colors['t'], linestyle='-', label=f"{m0:.2f}")
 
-
-        #Aide de l'IA pour correctement agencer les légendes
+        # Aide de l'IA pour correctement agencer les légendes
         self.__ax[0].legend(loc='lower center', bbox_to_anchor=(0.5, -0.37), framealpha=0.8, ncol=1)
         self.__ax[1].legend(loc='lower center', bbox_to_anchor=(0.5, -0.37), framealpha=0.8, ncol=1)

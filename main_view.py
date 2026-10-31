@@ -1,9 +1,8 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QPixmap
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QLabel, QSlider, QComboBox, QDoubleSpinBox, QFileDialog, \
     QLineEdit
 from PyQt6.uic import loadUi
-from PyQt6.QtGui import QPixmap
 import io
 import matplotlib.pyplot as plt
 
@@ -16,18 +15,16 @@ from mpl_canvas import MPLCanvas
 class MainView(QMainWindow):
     __model: FonctionModel
 
-    comboBox: QComboBox
-
     widget: QWidget
 
+    comboBox: QComboBox
     horizontalSlider: QSlider
     deriveeLabel: QLabel
     tangenceLabel: QLabel
     TVLabel: QLabel
-
-    lineEditTV : QLineEdit
-    lineEditTangente : QLineEdit
-    label : QLabel
+    lineEditTV: QLineEdit
+    lineEditTangente: QLineEdit
+    label: QLabel
 
     doubleSpinBox: QDoubleSpinBox
     doubleSpinBox_2: QDoubleSpinBox
@@ -35,16 +32,13 @@ class MainView(QMainWindow):
     modifierFonctions: QAction
     exporterEnPDF: QAction
     toggleGrid: QAction
-    couleurs: QAction
 
     bleuF: QAction
     vertF: QAction
     rougeF: QAction
-
     bleuD: QAction
     vertD: QAction
     rougeD: QAction
-
     bleuT: QAction
     vertT: QAction
     rougeT: QAction
@@ -66,7 +60,7 @@ class MainView(QMainWindow):
         self.lineEditTangente.setReadOnly(True)
 
         self.liste_fonctions = ListeFonctionsModel("fonctions.json")
-        self.comboBox.addItems(self.liste_fonctions.liste_fonctions)
+        self.comboBox.addItems(self.liste_fonctions.liste_fonctions_str)
 
         self.doubleSpinBox.setValue(0)
         self.doubleSpinBox_2.setValue(10)
@@ -88,31 +82,25 @@ class MainView(QMainWindow):
         self.horizontalSlider.setMaximum(int(self.model.maximum))
         self.horizontalSlider.setValue(int(self.model.tangente))
 
-        latex_code = self.model.derivee_latex()
-        pixmap = self.render_latex_to_pixmap(latex_code)
-        self.label.setPixmap(pixmap)
+        self.update_latex_label()
 
         self.horizontalSlider.valueChanged.connect(self.update_valeurs_slide)
         self.horizontalSlider.sliderReleased.connect(self.update_canvas)
-
         self.comboBox.currentTextChanged.connect(self.charger_fonction)
         self.doubleSpinBox.valueChanged.connect(self.update_bounds)
         self.doubleSpinBox_2.valueChanged.connect(self.update_bounds)
 
         self.dock_widget = FonctionView(self)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_widget)
-
         self.dock_widget.setFloating(True)
         self.was_docked = False
-
         self.dock_widget.setVisible(False)
 
         self.actionOuvrir.triggered.connect(self.action_ouvrir)
         self.actionMasquer.triggered.connect(self.action_masquer)
         self.actionDocker.triggered.connect(self.action_docker)
         self.actionD_tacher.triggered.connect(self.action_detacher)
-
-        self.exporterEnPDF.triggered.connect(self.export)
+        self.exporterEnPDF.triggered.connect(self.export_pdf)
         self.toggleGrid.triggered.connect(self.toggle_grid)
 
         self.bleuF.triggered.connect(lambda: self.changer_couleur("f", "blue"))
@@ -150,10 +138,8 @@ class MainView(QMainWindow):
 
     def update_valeurs_slide(self, value):
         self.model.tangente = value
-
         y = self.model.get_y_tangente(value)
         taux_de_variation = self.model.get_taux_variation(value)
-
         self.lineEditTangente.setText(f"({value:.2f}, {y:.2f})")
         self.lineEditTV.setText(f"{taux_de_variation:.2f}")
 
@@ -164,11 +150,15 @@ class MainView(QMainWindow):
         if value_min < value_max:
             self.model.minimum = value_min
             self.model.maximum = value_max
-
             self.horizontalSlider.setMinimum(int(value_min))
             self.horizontalSlider.setMaximum(int(value_max))
-
             self.update_canvas()
+
+    # Change la pixmap pour la nouvelle pixmap
+    def update_latex_label(self):
+        latex_derivee = self.model.derivee_latex()
+        pixmap = self.render_latex_to_pixmap(latex_derivee)
+        self.label.setPixmap(pixmap)
 
     def update_canvas(self):
         if self.canvas:
@@ -177,18 +167,13 @@ class MainView(QMainWindow):
 
         self.canvas = MPLCanvas(self.model, show_grid=self.grid_enabeled, colors=self.colors)
         self.widget.layout().addWidget(self.canvas)
-
-        # Remplacement du texte brut par le rendu LaTeX dans le QLabel
-        latex_code = self.model.derivee_latex()
-        pixmap = self.render_latex_to_pixmap(latex_code)
-        self.label.setPixmap(pixmap)
-
+        self.update_latex_label()
         self.update_valeurs_slide(self.horizontalSlider.value())
 
     def update_window(self):
         self.comboBox.clear()
         self.liste_fonctions = ListeFonctionsModel("fonctions.json")
-        self.comboBox.addItems(self.liste_fonctions.liste_fonctions)
+        self.comboBox.addItems(self.liste_fonctions.liste_fonctions_str)
         self.model.fonction = self.comboBox.currentText()
         self.update_canvas()
 
@@ -206,17 +191,17 @@ class MainView(QMainWindow):
         self.update_canvas()
 
     # l'IA a été consulté pour construire la fonction
-    def export(self):
+    def export_pdf(self):
         file_path, _ = QFileDialog.getSaveFileName(self, "Exporter en PDF", "graphes.pdf", "Fichiers PDF (*.pdf)")
         if file_path:
             self.canvas.figure.savefig(file_path, format='pdf', bbox_inches='tight')
 
     @staticmethod
     def render_latex_to_pixmap(latex_str):
-        """La méthode crée un pixmap (Une image de l'expression en latex avec matplotlib)."""
+        # La méthode crée un pixmap (Une image de l'expression en latex avec matplotlib).
         fig = plt.figure(figsize=(0.01, 0.01), dpi=150)
 
-        #Ajoute $ pour active le mode math de matplotlib
+        # Ajoute $ pour activer le mode math de matplotlib
         fig.text(0, 0, f"${latex_str}$", fontsize=8, color="white")
 
         buf = io.BytesIO()

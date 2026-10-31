@@ -20,6 +20,6 @@ QPushButton {
 }
 
 QListWidget {
-    background-color: black;
+    background-color: #3e3e3e;
     color: white;
 }

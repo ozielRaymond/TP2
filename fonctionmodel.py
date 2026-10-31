@@ -3,6 +3,7 @@ import numpy as np
 
 from sympy import Expr
 
+
 class FonctionModel:
     __minimum: float
     __maximum: float
@@ -18,9 +19,19 @@ class FonctionModel:
         self.__maximum = maximum
         self.__tangente = tangente
 
+    def derivee_texte(self):
+        expr = sp.sympify(self.__fonction)
+        derivee = sp.diff(expr, self.__x)
+        return str(derivee)
+
+    # Fonction Utilisé pour convertir l'expression expr en latex
+    def derivee_latex(self):
+        expr = sp.sympify(self.__fonction)
+        derivee = sp.diff(expr, self.__x)
+        return sp.latex(derivee)
+
     def get_y_tangente(self, x):
-        y = self.fonction(np.array([x]))[0]
-        return float(y)
+        return float(self.fonction(x))
 
     def get_taux_variation(self, value):
         return float(self.differentie(value))
@@ -60,14 +71,9 @@ class FonctionModel:
 
         if derivee.is_number:
             constante = float(derivee)
-            return lambda x : np.broadcast_to(constante, np.shape(x))
+            return lambda x: np.broadcast_to(constante, np.shape(x))
 
         return sp.lambdify(self.__x, derivee, modules="numpy")
-
-    def derivee_text(self):
-        expr = sp.sympify(self.__fonction)
-        derivee = sp.diff(expr, self.__x)
-        return str(derivee)
 
     @property
     def fonction(self):
@@ -75,16 +81,10 @@ class FonctionModel:
 
         if expr.is_number:
             constante = float(expr)
-            return lambda x : np.broadcast_to(constante, np.shape(x))
+            return lambda x: np.broadcast_to(constante, np.shape(x))
 
         return sp.lambdify(self.__x, expr, modules="numpy")
 
     @fonction.setter
     def fonction(self, value):
         self.__fonction = value
-
-    # Fonction Utilisé pour convertir l'expression expr en latex
-    def derivee_latex(self):
-        expr = sp.sympify(self.__fonction)
-        derivee = sp.diff(expr, self.__x)
-        return sp.latex(derivee)
