@@ -7,27 +7,22 @@ import io
 import matplotlib.pyplot as plt
 
 from fonction_view import FonctionView
-from fonctionmodel import FonctionModel
+from fonction_model import FonctionModel
 from liste_fonctions_model import ListeFonctionsModel
 from mpl_canvas import MPLCanvas
 
 
 class MainView(QMainWindow):
-    __model: FonctionModel
-
     widget: QWidget
 
     comboBox: QComboBox
     horizontalSlider: QSlider
-    deriveeLabel: QLabel
-    tangenceLabel: QLabel
-    TVLabel: QLabel
     lineEditTV: QLineEdit
     lineEditTangente: QLineEdit
-    label: QLabel
+    deriveeLabel: QLabel
 
-    doubleSpinBox: QDoubleSpinBox
-    doubleSpinBox_2: QDoubleSpinBox
+    minSpinBox: QDoubleSpinBox
+    maxSpinBox: QDoubleSpinBox
 
     modifierFonctions: QAction
     exporterEnPDF: QAction
@@ -51,24 +46,24 @@ class MainView(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        loadUi("mainWindow.ui", self)
+        loadUi("ui/main_view.ui", self)
 
-        with open("style.css", "r", encoding="utf-8") as f:
+        with open("json_et_stylesheet/style.css", "r", encoding="utf-8") as f:
             self.setStyleSheet(f.read())
 
         self.lineEditTV.setReadOnly(True)
         self.lineEditTangente.setReadOnly(True)
 
-        self.liste_fonctions = ListeFonctionsModel("fonctions.json")
+        self.liste_fonctions = ListeFonctionsModel("json_et_stylesheet/fonctions.json")
         self.comboBox.addItems(self.liste_fonctions.liste_fonctions_str)
 
-        self.doubleSpinBox.setValue(0)
-        self.doubleSpinBox_2.setValue(10)
+        self.minSpinBox.setValue(0)
+        self.maxSpinBox.setValue(10)
 
         self.model = FonctionModel(
             self.comboBox.currentText(),
-            self.doubleSpinBox.value(),
-            self.doubleSpinBox_2.value(),
+            self.minSpinBox.value(),
+            self.maxSpinBox.value(),
             2
         )
 
@@ -87,8 +82,8 @@ class MainView(QMainWindow):
         self.horizontalSlider.valueChanged.connect(self.update_valeurs_slide)
         self.horizontalSlider.sliderReleased.connect(self.update_canvas)
         self.comboBox.currentTextChanged.connect(self.charger_fonction)
-        self.doubleSpinBox.valueChanged.connect(self.update_bounds)
-        self.doubleSpinBox_2.valueChanged.connect(self.update_bounds)
+        self.minSpinBox.valueChanged.connect(self.update_bounds)
+        self.maxSpinBox.valueChanged.connect(self.update_bounds)
 
         self.dock_widget = FonctionView(self)
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.dock_widget)
@@ -144,8 +139,8 @@ class MainView(QMainWindow):
         self.lineEditTV.setText(f"{taux_de_variation:.2f}")
 
     def update_bounds(self):
-        value_min = self.doubleSpinBox.value()
-        value_max = self.doubleSpinBox_2.value()
+        value_min = self.minSpinBox.value()
+        value_max = self.maxSpinBox.value()
 
         if value_min < value_max:
             self.model.minimum = value_min
@@ -158,7 +153,7 @@ class MainView(QMainWindow):
     def update_latex_label(self):
         latex_derivee = self.model.derivee_latex()
         pixmap = self.render_latex_to_pixmap(latex_derivee)
-        self.label.setPixmap(pixmap)
+        self.deriveeLabel.setPixmap(pixmap)
 
     def update_canvas(self):
         if self.canvas:
@@ -172,7 +167,7 @@ class MainView(QMainWindow):
 
     def update_window(self):
         self.comboBox.clear()
-        self.liste_fonctions = ListeFonctionsModel("fonctions.json")
+        self.liste_fonctions = ListeFonctionsModel("json_et_stylesheet/fonctions.json")
         self.comboBox.addItems(self.liste_fonctions.liste_fonctions_str)
         self.model.fonction = self.comboBox.currentText()
         self.update_canvas()

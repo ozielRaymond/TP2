@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <property name="leftMargin">
+     <number>20</number>
+    </property>
+    <property name="topMargin">
+     <number>20</number>
+    </property>
+    <property name="rightMargin">
+     <number>20</number>
+    </property>
+    <property name="bottomMargin">
+     <number>20</number>
+    </property>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>fonction</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>x minimum</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="minSpinBox"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>x maximum</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="maxSpinBox"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="matplotlibVLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QWidget" name="widget" native="true"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>10</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>10</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QSlider" name="horizontalSlider">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QGroupBox" name="groupBox">
+        <property name="title">
+         <string>Dérivée</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="1" column="0">
+          <widget class="QLabel" name="tangenceLabel">
+           <property name="text">
+            <string>Point de tangence</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4">
+          <widget class="QLineEdit" name="lineEditTV"/>
+         </item>
+         <item row="1" column="3">
+          <widget class="QLabel" name="TVLabel">
+           <property name="text">
+            <string>Taux de variation  </string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Fonction Dérivée : </string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEditTangente"/>
+         </item>
+         <item row="1" column="2">
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="5">
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="deriveeLabel">
+           <property name="text">
+            <string>---</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuOptions">
+    <property name="title">
+     <string>Options</string>
+    </property>
+    <widget class="QMenu" name="menuModifier_les_couleurs">
+     <property name="title">
+      <string>Modifier les couleurs</string>
+     </property>
+     <widget class="QMenu" name="menuFonction">
+      <property name="title">
+       <string>Fonction</string>
+      </property>
+      <addaction name="bleuF"/>
+      <addaction name="rougeF"/>
+      <addaction name="vertF"/>
+     </widget>
+     <widget class="QMenu" name="menuD_riv_e">
+      <property name="title">
+       <string>Dérivée</string>
+      </property>
+      <addaction name="bleuD"/>
+      <addaction name="rougeD"/>
+      <addaction name="vertD"/>
+     </widget>
+     <widget class="QMenu" name="menuTangente">
+      <property name="title">
+       <string>Tangente</string>
+      </property>
+      <addaction name="bleuT"/>
+      <addaction name="rougeT"/>
+      <addaction name="vertT"/>
+     </widget>
+     <addaction name="menuFonction"/>
+     <addaction name="menuD_riv_e"/>
+     <addaction name="menuTangente"/>
+    </widget>
+    <widget class="QMenu" name="menu_editeur_de_fonctions">
+     <property name="title">
+      <string>Éditeur de fonctions</string>
+     </property>
+     <addaction name="actionOuvrir"/>
+     <addaction name="actionMasquer"/>
+     <addaction name="actionDocker"/>
+     <addaction name="actionD_tacher"/>
+    </widget>
+    <addaction name="menu_editeur_de_fonctions"/>
+    <addaction name="exporterEnPDF"/>
+    <addaction name="toggleGrid"/>
+    <addaction name="menuModifier_les_couleurs"/>
+   </widget>
+   <addaction name="menuOptions"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="exporterEnPDF">
+   <property name="text">
+    <string>Exporter en PDF</string>
+   </property>
+  </action>
+  <action name="toggleGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Afficher la grille</string>
+   </property>
+  </action>
+  <action name="actionF">
+   <property name="text">
+    <string>F</string>
+   </property>
+  </action>
+  <action name="bleuF">
+   <property name="text">
+    <string>Bleu</string>
+   </property>
+  </action>
+  <action name="rougeF">
+   <property name="text">
+    <string>Rouge</string>
+   </property>
+  </action>
+  <action name="vertF">
+   <property name="text">
+    <string>Vert</string>
+   </property>
+  </action>
+  <action name="bleuD">
+   <property name="text">
+    <string>Bleu</string>
+   </property>
+  </action>
+  <action name="rougeD">
+   <property name="text">
+    <string>Rouge</string>
+   </property>
+  </action>
+  <action name="vertD">
+   <property name="text">
+    <string>Vert</string>
+   </property>
+  </action>
+  <action name="bleuT">
+   <property name="text">
+    <string>Bleu</string>
+   </property>
+  </action>
+  <action name="rougeT">
+   <property name="text">
+    <string>Rouge</string>
+   </property>
+  </action>
+  <action name="vertT">
+   <property name="text">
+    <string>Vert</string>
+   </property>
+  </action>
+  <action name="actionOuvrir">
+   <property name="text">
+    <string>Ouvrir</string>
+   </property>
+  </action>
+  <action name="actionMasquer">
+   <property name="text">
+    <string>Masquer</string>
+   </property>
+  </action>
+  <action name="actionDocker">
+   <property name="text">
+    <string>Docker</string>
+   </property>
+  </action>
+  <action name="actionD_tacher">
+   <property name="text">
+    <string>Détacher</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

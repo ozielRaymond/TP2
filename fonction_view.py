@@ -17,9 +17,9 @@ class FonctionView(QDockWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        loadUi('fonction_view.ui', self)
+        loadUi('ui/fonction_view.ui', self)
 
-        self.fonctions = ListeFonctionsModel("fonctions.json")
+        self.fonctions = ListeFonctionsModel("json_et_stylesheet/fonctions.json")
 
         self.display_fonctions()
 
@@ -34,7 +34,7 @@ class FonctionView(QDockWidget):
             self.listWidget.addItem(fonction)
 
     def save_modifications(self):
-        self.fonctions.sauvegarder_fonctions("fonctions.json")
+        self.fonctions.sauvegarder_fonctions("json_et_stylesheet/fonctions.json")
 
         # Aide de l'IA pour savoir comment désigner la fonction update_window du parent
         parent = self.parent()
