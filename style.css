@@ -1,0 +1,25 @@
+QMainWindow {
+    background-color: black;
+    color: white;
+}
+QLabel {
+    color: white;
+    font-size: 15px;
+}
+QGroupBox {
+    color: white;
+}
+
+QLineEdit, QComboBox, QDoubleSpinBox {
+    background-color: #3e3e3e;
+    color: white;
+}
+
+QPushButton {
+    color: white;
+}
+
+QListWidget {
+    background-color: black;
+    color: white;
+}
