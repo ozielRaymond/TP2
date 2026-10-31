@@ -72,10 +72,18 @@ class FonctionView(QDockWidget):
             )
 
     def remove_fonction(self):
-        element_selectionne = self.listWidget.currentItem().text()
-
-        self.liste_fonctions.remove_fonction(element_selectionne)
+        element_selectionne = self.listWidget.currentItem()
+        if element_selectionne is None:
+            return
+        self.liste_fonctions.remove_fonction(element_selectionne.text())
         self.display_fonctions()
 
     def save(self):
         self.liste_fonctions.save_fonctions("fonctions.json")
+
+        # Aide de l'IA pour savoir comment désigner la fonction update_window du parent
+        parent = self.parent()
+        if parent and hasattr(parent, "update_window"):
+            parent.update_window()
+
+        self.close()

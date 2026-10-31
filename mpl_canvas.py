@@ -7,7 +7,7 @@ from fonctionmodel import FonctionModel
 
 class MPLCanvas(FigureCanvasQTAgg):
 
-    def __init__(self, model : FonctionModel, show_grid = False, colors="None"):
+    def __init__(self, model : FonctionModel, show_grid = False, colors=None):
         # Implémentation suggérée par l'IA de self.__fig = Figure() au lieu de self.__fig, self.__ax
         # permet de créer une figure indépendante à chaque fois au lieu d'accumuler les fonctions dans le subplot
         self.__fig = Figure()
