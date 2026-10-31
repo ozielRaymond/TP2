@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QApplication
 
 from main_view import MainView
 
+# Point d'entrée de l'application
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     fenetre = MainView()

@@ -12,15 +12,34 @@ from liste_fonctions_model import ListeFonctionsModel
 from mpl_canvas import MPLCanvas
 
 
-class MainView(QMainWindow):
-    widget: QWidget
+# L'IA a été consultée et utilisée dans cette classe
+# pour contribuer à la documentation et
+# me guider dans l'implémentation du mécanisme d'affichage du LaTex avec pixmap
+# et de l'export en format PDF.
 
+class MainView(QMainWindow):
+    """Fenêtre principale gérant l'ensemble de la vue de l'application.
+
+    Attributs :
+        widget (QWidget) : Widget du canvas graphique.
+        comboBox (QComboBox) : Sélecteur de fonctions.
+        horizontalSlider (QSlider) : Slider d'ajustement du point de tangente.
+        lineEditTV (QLineEdit) : Champ d'affichage du taux de variation.
+        lineEditTangente (QLineEdit) : Champ d'affichage de la tangente.
+        deriveeLabel (QLabel) : Label d'affichage de la dérivée en LaTeX.
+        minSpinBox (QDoubleSpinBox) : Contrôle du minimum de la fonction en x.
+        maxSpinBox (QDoubleSpinBox) : Contrôle du maximum de la fonction en x.
+        model (FonctionModel) : Modèle de la fonction.
+        canvas (MPLCanvas) : Composant de rendu Matplotlib.
+        dock_widget (FonctionView) : QDockWidget pour l'édition de la liste.
+    """
+
+    widget: QWidget
     comboBox: QComboBox
     horizontalSlider: QSlider
     lineEditTV: QLineEdit
     lineEditTangente: QLineEdit
     deriveeLabel: QLabel
-
     minSpinBox: QDoubleSpinBox
     maxSpinBox: QDoubleSpinBox
 
@@ -44,6 +63,7 @@ class MainView(QMainWindow):
     actionD_tacher: QAction
 
     def __init__(self):
+        """Initialise l'interface principale et connecte tous les événements."""
         super().__init__()
 
         loadUi("ui/main_view.ui", self)
@@ -111,6 +131,7 @@ class MainView(QMainWindow):
         self.rougeT.triggered.connect(lambda: self.changer_couleur("t", "red"))
 
     def action_ouvrir(self):
+        """Affiche le DockWidget selon son dernier état d'affichage."""
         self.dock_widget.setVisible(True)
         if self.was_docked:
             self.dock_widget.setFloating(False)
@@ -118,20 +139,28 @@ class MainView(QMainWindow):
             self.dock_widget.setFloating(True)
 
     def action_masquer(self):
+        """Masque le DockWidget"""
         self.was_docked = not self.dock_widget.isFloating()
         self.dock_widget.setVisible(False)
 
     def action_docker(self):
+        """Ancre le DockWidget sur le côté droit de la fenêtre."""
         self.was_docked = True
         self.dock_widget.setVisible(True)
         self.dock_widget.setFloating(False)
 
     def action_detacher(self):
+        """Détache le DockWidget sous forme de floating window."""
         self.was_docked = False
         self.dock_widget.setVisible(True)
         self.dock_widget.setFloating(True)
 
     def update_valeurs_slide(self, value):
+        """Met à jour les champs textuels lors du déplacement du slider de la tangente.
+
+        Args :
+            value (int) : Nouvelle valeur de la tangente issue du slider.
+        """
         self.model.tangente = value
         y = self.model.get_y_tangente(value)
         taux_de_variation = self.model.get_taux_variation(value)
@@ -139,6 +168,7 @@ class MainView(QMainWindow):
         self.lineEditTV.setText(f"{taux_de_variation:.2f}")
 
     def update_bounds(self):
+        """Valide et applique les bornes de la fonction spécifiées dans les QDoubleSpinBox."""
         value_min = self.minSpinBox.value()
         value_max = self.maxSpinBox.value()
 
@@ -149,13 +179,14 @@ class MainView(QMainWindow):
             self.horizontalSlider.setMaximum(int(value_max))
             self.update_canvas()
 
-    # Change la pixmap pour la nouvelle pixmap
     def update_latex_label(self):
+        """Génère le rendu LaTeX de la dérivée et met à jour la pixmap dans deriveeLabel."""
         latex_derivee = self.model.derivee_latex()
         pixmap = self.render_latex_to_pixmap(latex_derivee)
         self.deriveeLabel.setPixmap(pixmap)
 
     def update_canvas(self):
+        """Enlève l'ancien canvas et en réinstancie un nouveau pour rafraîchir l'affichage."""
         if self.canvas:
             self.widget.layout().removeWidget(self.canvas)
             self.canvas.deleteLater()
@@ -166,6 +197,7 @@ class MainView(QMainWindow):
         self.update_valeurs_slide(self.horizontalSlider.value())
 
     def update_window(self):
+        """Actualise la liste des fonctions à partir du fichier JSON et actualise l'affichage."""
         self.comboBox.clear()
         self.liste_fonctions = ListeFonctionsModel("json_et_stylesheet/fonctions.json")
         self.comboBox.addItems(self.liste_fonctions.liste_fonctions_str)
@@ -173,26 +205,53 @@ class MainView(QMainWindow):
         self.update_canvas()
 
     def toggle_grid(self, checked):
+        """Active ou désactive la grille sur les sous-graphiques.
+
+        Args :
+            checked (bool) : État de la sélection de la grille dans le menu.
+        """
         self.grid_enabeled = checked
         self.update_canvas()
 
     def charger_fonction(self, texte_fonction):
+        """Change la fonction sélectionnée dans le modèle et dessine les graphiques.
+
+        Args :
+            texte_fonction (str) : L'expression de la fonction sélectionnée.
+        """
         if texte_fonction:
             self.model.fonction = texte_fonction
             self.update_canvas()
 
     def changer_couleur(self, element, couleur):
+        """Met à jour la couleur d'une courbe spécifique.
+
+        Args:
+            element (str): L'identifiant de la courbe ('f', "f'", 't').
+            couleur (str): Le nom de la couleur ('blue', 'green', 'red').
+        """
         self.colors[element] = couleur
         self.update_canvas()
 
-    # l'IA a été consulté pour construire la fonction
+    # L'IA a été consultée pour construire la fonction et comprendre le mécanisme d'export.
     def export_pdf(self):
+        """Ouvre une boîte de dialogue pour enregistrer les graphiques Matplotlib en format PDF."""
         file_path, _ = QFileDialog.getSaveFileName(self, "Exporter en PDF", "graphes.pdf", "Fichiers PDF (*.pdf)")
         if file_path:
             self.canvas.figure.savefig(file_path, format='pdf', bbox_inches='tight')
 
+    # L'IA a été consultée pour construire et comprendre la méthode de transformation en pixmap.
     @staticmethod
     def render_latex_to_pixmap(latex_str):
+        """Convertit une chaîne LaTeX en image QPixmap via une figure Matplotlib.
+
+        Args :
+            latex_str (str) : L'expression LaTeX
+
+            Returns :
+                QPixmap : L'image générée sous forme d'objet QPixmap transparent.
+        """
+
         # La méthode crée un pixmap (Une image de l'expression en latex avec matplotlib).
         fig = plt.figure(figsize=(0.01, 0.01), dpi=150)
 
